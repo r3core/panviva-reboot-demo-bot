@@ -1,13 +1,11 @@
-﻿# Panviva.RebootDemoBot.App
+﻿# Panviva Reboot Bot Demo
 
-Bot Framework v4 NLS bot sample.
-It is essentially a fork of the echobot sample provided by Microsoft.
-
-This bot has been created using [Bot Framework](https://dev.botframework.com), it shows how to create a simple bot that accepts input from the user and echoes it back.
+This project is essentially a fork of the echobot sample provided by Microsoft.
+The chatbot is powered by [Bot Framework](https://dev.botframework.com).
 
 ## Prerequisites
 
-- [.NET Core SDK](https://dotnet.microsoft.com/download) version 2.1
+- [.NET Core SDK](https://dotnet.microsoft.com/download) version 2.x
 
   ```bash
   # determine dotnet version
