@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
-// Generated with Bot Builder V4 SDK Template for Visual Studio NlsBot v4.3.0
+// Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
 
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +20,15 @@ namespace Panviva.RebootDemoBot.App
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.Local.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -38,6 +46,14 @@ namespace Panviva.RebootDemoBot.App
 
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, NlsBot>();
+
+            // Add the Panviva API Client
+            services.AddHttpClient("panviva", panvivaClient =>
+            {
+                panvivaClient.BaseAddress = new Uri(Configuration["PanvivaApiBase"]);
+                panvivaClient.DefaultRequestHeaders
+                    .Add("Ocp-Apim-Subscription-Key", Configuration["PanvivaApiKey"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
